@@ -3,7 +3,7 @@
   roles:
      - system
      - ruby
-     - mysql
+     - postgresql
      - redmine
      - passenger
      - apache

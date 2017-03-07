@@ -1,4 +1,10 @@
 - hosts: redmine
+  gather_facts: no
+  tasks:
+     - name: Install Python2
+       raw: sudo apt-get update -qq && sudo apt-get install python-minimal -qq
+
+- hosts: redmine
   remote_user: ec2-user
   roles:
      - system

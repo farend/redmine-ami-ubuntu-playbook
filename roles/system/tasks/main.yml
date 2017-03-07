@@ -10,39 +10,34 @@
   sudo: yes
   command: swapon /swap
 
-- name: Install Development Tools
+- name: Create Japanese locale
   sudo: yes
-  yum: name='@Development Tools'
+  locale_gen:
+    name: ja_JP.UTF-8
+    state: present
 
-- name: Install required　packages
+- name: Install required packages
   sudo: yes
-  yum: pkg={{ item }} state=present
+  apt: name={{ item }} state=present
   with_items:
-    - openssl-devel
-    - zlib-devel
-    - readline-devel
-    - curl-devel
-    - libyaml-devel
-    - libffi-devel
-    - httpd
-    - httpd-devel
-    - postgresql95-devel
-    - postgresql95-server
-    - postfix
-    - ImageMagick
-    - ImageMagick-devel
-    - ipa-gothic-fonts
-    - python-devel
-    - python-setuptools
+    - build-essential
+    - zlib1g-dev
+    - libssl-dev
+    - libreadline-dev
+    - libcurl4-openssl-dev
+    - postgresql
+    - postgresql-server-dev-9.5
+    - python-psycopg2
+    - apache2
+    - apache2-dev
+    - libapr1-dev
+    - libaprutil1-dev
+    - imagemagick
+    - libmagick++-dev
+    - fonts-ipafont-gothic
     - subversion
-
-- name: Stop sendmail service
-  sudo: yes
-  service: name=sendmail state=stopped
-
-- name: Set up using Postfix
-  sudo: yes
-  alternatives: name=mta path=/usr/sbin/sendmail.postfix link=/usr/sbin/sendmail
+    - git
+    - postfix
 
 - name: Start Postfix service
   sudo: yes

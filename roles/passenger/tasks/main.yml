@@ -13,17 +13,22 @@
 - name: Create redmine.conf from output of building passenger
   sudo: yes
   shell:
-    passenger-install-apache2-module --snippet > /etc/httpd/conf.d/redmine.conf
+    passenger-install-apache2-module --snippet > /etc/apache2/conf-available/redmine.conf
   environment:
     PATH: "/usr/local/bin:{{ ansible_env.PATH }}"
 
+- name: Enable redmine.conf
+  sudo: yes
+  shell:
+    a2enconf redmine.conf
+
 - name: Change Apache's document root
   sudo: yes
-  command: sed -i -e "s!DocumentRoot \"/var/www/html\"!DocumentRoot \"/var/lib/redmine/public\"!g" /etc/httpd/conf/httpd.conf
+  command: sed -i -e "s!DocumentRoot /var/www/html!DocumentRoot \"/var/lib/redmine/public\"!g"  /etc/apache2/sites-available/000-default.conf
 
 - name: Change Server Tokens mode
   sudo: yes
-  command: sed -i -e "s!ServerTokens OS!ServerTokens Prod!g" /etc/httpd/conf/httpd.conf
+  command: sed -i -e "s!ServerTokens OS!ServerTokens Prod!g" /etc/apache2/conf-available/security.conf
 
 - name: Create additional conf
   sudo: yes
@@ -31,4 +36,4 @@
 
 - name: Add other config
   sudo: yes
-  shell: cat /tmp/add_redmine.conf >> /etc/httpd/conf.d/redmine.conf
+  shell: cat /tmp/add_redmine.conf >> /etc/apache2/conf-available/redmine.conf

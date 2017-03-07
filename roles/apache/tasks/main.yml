@@ -1,8 +1,17 @@
 - name: Change owner Redmine directory
   sudo: yes
   command:
-    chown -R apache:apache {{ redmine_dir }}
+    chown -R www-data:www-data {{ redmine_dir }}
 
-- name: Start httpd and run it automatically at boot time
+- name: Enable Mod Header
   sudo: yes
-  service: name=httpd state=started enabled=yes
+  command:
+    a2enmod headers
+
+- name: Restart apache2
+  sudo: yes
+  service: name=apache2 state=restarted
+
+- name: Run apache2 automatically at boot time
+  sudo: yes
+  service: name=apache2 state=started enabled=yes

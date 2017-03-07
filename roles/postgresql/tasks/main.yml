@@ -1,20 +1,6 @@
-- name: Install python-psycopg2
-  sudo: yes
-  yum: pkg=python27-psycopg2 state=present
-
-- name: Check DatabaseCluster
-  sudo: yes
-  stat: path=/var/lib/pgsql95/data/PG_VERSION
-  register: database
-
-- name: Create DatabaseCluster
-  sudo: yes
-  command: service postgresql95 initdb
-  when: not database.stat.exists
-
 - name: Start PostgreSQL service and be sure PostgreSQL is enabled
   sudo: yes
-  service: name=postgresql95 state=started enabled=yes
+  service: name=postgresql state=started enabled=yes
 
 - name: Create user for Redmine
   sudo: yes
@@ -38,7 +24,7 @@
   sudo: yes
   template:
     src: pg_hba.conf
-    dest: /var/lib/pgsql95/data/pg_hba.conf
+    dest: /etc/postgresql/9.5/main/pg_hba.conf
     owner: postgres
     group: postgres
     mode: '0600'
@@ -46,5 +32,5 @@
 
 - name: Restart PostgresSQL
   sudo: yes
-  service: name=postgresql95 state=restarted
+  service: name=postgresql state=restarted
   when: modify_pg_hba| changed

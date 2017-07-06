@@ -24,11 +24,21 @@
 
 - name: Change Apache's document root
   sudo: yes
-  command: sed -i -e "s!DocumentRoot /var/www/html!DocumentRoot \"/var/lib/redmine/public\"!g"  /etc/apache2/sites-available/000-default.conf
+  lineinfile: >-
+    dest='/etc/apache2/sites-available/000-default.conf'
+    state=present
+    backrefs=yes
+    regexp='DocumentRoot /var/www/html'
+    line='DocumentRoot \"/var/lib/redmine/public\"'
 
 - name: Change Server Tokens mode
   sudo: yes
-  command: sed -i -e "s!ServerTokens OS!ServerTokens Prod!g" /etc/apache2/conf-available/security.conf
+  lineinfile: >-
+    dest='/etc/apache2/conf-available/security.conf'
+    state=present
+    backrefs=yes
+    regexp='ServerTokens OS'
+    line='ServerTokens Prod'
 
 - name: Create additional conf
   sudo: yes

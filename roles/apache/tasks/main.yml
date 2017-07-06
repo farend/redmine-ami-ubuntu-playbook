@@ -1,7 +1,11 @@
 - name: Change owner Redmine directory
   sudo: yes
-  command:
-    chown -R www-data:www-data {{ redmine_dir }}
+  file:
+    path: "{{ redmine_dir }}"
+    owner: www-data
+    group: www-data
+    state: directory
+    recurse: yes
 
 - name: Enable Mod Header
   sudo: yes
